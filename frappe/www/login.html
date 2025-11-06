@@ -7,7 +7,7 @@
 		<label class="form-label sr-only" for="login_email">{{ login_label or _("Email")}}</label>
 		<div class="email-field">
 			<input type="text" id="login_email" class="form-control"
-				placeholder="{% if login_name_placeholder %}{{ login_name_placeholder  }}{% else %}{{ _('jane@example.com') }}{% endif %}"
+				placeholder="{% if login_name_placeholder %}{{ login_name_placeholder  }}{% else %}{{ _('username') }}{% endif %}"
 				required autofocus autocomplete="username">
 
 			<svg class="field-icon email-icon" width="16" height="16" viewBox="0 0 16 16" fill="none"
@@ -55,14 +55,7 @@
 {% endblock %}
 
 {% macro logo_section(title=null) %}
-<div class="page-card-head">
-	<img class="app-logo" src="{{ logo }}">
-	{% if title %}
-	<h4>{{ _(title)}}</h4>
-	{% else %}
-	<h4>{{ _('Login to {0}').format(app_name or _("Frappe")) }}</h4>
-	{% endif %}
-</div>
+
 {% endmacro %}
 
 {% block page_content %}
@@ -78,6 +71,10 @@
 	<section class='for-login'>
 		{{ logo_section() }}
 		<div class="login-content page-card">
+			<div class="page-card-head">
+				<img class="app-logo" src="{{ logo }}">
+				<h4>Login</h4>
+			</div>
 			<form class="form-signin form-login" role="form">
 				{%- if social_login or login_with_email_link -%}
 				<div class="page-card-body">

@@ -20,23 +20,10 @@ class Currency(Document):
 		enabled: DF.Check
 		fraction: DF.Data | None
 		fraction_units: DF.Int
-		number_format: DF.Literal[
-			"",
-			"#,###.##",
-			"#.###,##",
-			"# ###.##",
-			"# ###,##",
-			"#'###.##",
-			"#, ###.##",
-			"#,##,###.##",
-			"#,###.###",
-			"#.###",
-			"#,###",
-		]
+		number_format: DF.Literal["", "#,###.##", "#.###,##", "# ###.##", "# ###,##", "#'###.##", "#, ###.##", "#,##,###.##", "#,###.###", "#.###", "#,###"]
 		smallest_currency_fraction_value: DF.Currency
 		symbol: DF.Data | None
 		symbol_on_right: DF.Check
-
 	# end: auto-generated types
 	# NOTE: During installation country docs are bulk inserted.
 	def validate(self):

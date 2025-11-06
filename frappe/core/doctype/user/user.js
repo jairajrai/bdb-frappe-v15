@@ -106,6 +106,12 @@ frappe.ui.form.on("User", {
 				frm.roles_editor.show();
 			}
 		}
+
+		if (frm.doc.name !== "Administrator") {
+			frm.set_df_property("username", "read_only", !frm.is_new());
+			frm.set_df_property("time_zone", "read_only", !frm.is_new());
+			frm.set_df_property("language", "read_only", !frm.is_new());
+		}
 	},
 	refresh: function (frm) {
 		let doc = frm.doc;

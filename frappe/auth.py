@@ -423,17 +423,25 @@ class CookieManager:
 		for key in set(self.to_delete):
 			response.set_cookie(key, "", expires=expires)
 
-
 @frappe.whitelist()
 def get_logged_user():
 	return frappe.session.user
 
+@frappe.whitelist()
+def get_logged_in_user():
+	user = frappe.get_doc("User", frappe.session.user)
+	frappe.local.response['user'] = user.name
+	frappe.local.response['username'] = user.username
+	frappe.local.response['full_name'] = user.full_name
+	frappe.local.response['mobile_no'] = user.mobile_no
+	frappe.local.response['first_name'] = user.first_name
+	frappe.local.response['api_key'] = user.api_key
+	frappe.local.response['api_secret'] = user.get_password("api_secret")
 
 def clear_cookies():
 	if hasattr(frappe.local, "session"):
 		frappe.session.sid = ""
 	frappe.local.cookie_manager.delete_cookie(["full_name", "user_id", "sid", "user_image", "system_user"])
-
 
 def validate_ip_address(user):
 	"""
