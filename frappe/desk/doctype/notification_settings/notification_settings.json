@@ -119,7 +119,7 @@
  "in_create": 1,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-12-01 12:46:15.490640",
+ "modified": "2026-01-04 14:45:02.014121",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Notification Settings",
@@ -136,9 +136,30 @@
    "role": "All",
    "share": 1,
    "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Branch Manager",
+   "share": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Branch User",
+   "share": 1,
+   "write": 1
   }
  ],
  "read_only": 1,
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],

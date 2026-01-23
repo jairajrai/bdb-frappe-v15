@@ -108,7 +108,10 @@
   "column_break_65",
   "api_secret",
   "onboarding_status",
-  "connections_tab"
+  "connections_tab",
+  "branch_tab",
+  "user_branch_section",
+  "user_branch"
  ],
  "fields": [
   {
@@ -743,8 +746,7 @@
    "description": "Redirect to the selected app after login",
    "fieldname": "default_app",
    "fieldtype": "Select",
-   "label": "Default App",
-   "options": ""
+   "label": "Default App"
   },
   {
    "collapsible": 1,
@@ -811,6 +813,21 @@
    "fieldname": "dashboard",
    "fieldtype": "Check",
    "label": "Dashboard"
+  },
+  {
+   "fieldname": "branch_tab",
+   "fieldtype": "Tab Break",
+   "label": "Branch"
+  },
+  {
+   "fieldname": "user_branch_section",
+   "fieldtype": "Section Break",
+   "label": "User Branch"
+  },
+  {
+   "fieldname": "user_branch",
+   "fieldtype": "Table",
+   "options": "User Branch"
   }
  ],
  "icon": "fa fa-user",
@@ -874,7 +891,7 @@
   }
  ],
  "make_attachments_public": 1,
- "modified": "2025-03-17 11:29:39.254304",
+ "modified": "2026-01-22 17:04:23.741292",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "User",

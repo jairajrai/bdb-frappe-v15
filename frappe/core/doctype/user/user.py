@@ -59,6 +59,7 @@ class User(Document):
 	from typing import TYPE_CHECKING
 
 	if TYPE_CHECKING:
+		from agency_banking.agency_banking.doctype.user_branch.user_branch import UserBranch
 		from frappe.core.doctype.block_module.block_module import BlockModule
 		from frappe.core.doctype.defaultvalue.defaultvalue import DefaultValue
 		from frappe.core.doctype.has_role.has_role import HasRole
@@ -131,6 +132,7 @@ class User(Document):
 		time_zone: DF.Autocomplete | None
 		timeline: DF.Check
 		unsubscribed: DF.Check
+		user_branch: DF.Table[UserBranch]
 		user_emails: DF.Table[UserEmail]
 		user_image: DF.AttachImage | None
 		user_type: DF.Link | None

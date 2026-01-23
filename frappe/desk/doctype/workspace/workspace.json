@@ -219,7 +219,7 @@
  ],
  "in_create": 1,
  "links": [],
- "modified": "2024-05-30 17:30:36.791171",
+ "modified": "2026-01-07 22:37:13.141760",
  "modified_by": "Administrator",
  "module": "Desk",
  "name": "Workspace",
@@ -251,6 +251,7 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],

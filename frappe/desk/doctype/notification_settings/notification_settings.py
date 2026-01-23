@@ -12,9 +12,7 @@ class NotificationSettings(Document):
 	from typing import TYPE_CHECKING
 
 	if TYPE_CHECKING:
-		from frappe.desk.doctype.notification_subscribed_document.notification_subscribed_document import (
-			NotificationSubscribedDocument,
-		)
+		from frappe.desk.doctype.notification_subscribed_document.notification_subscribed_document import NotificationSubscribedDocument
 		from frappe.types import DF
 
 		enable_email_assignment: DF.Check
@@ -29,7 +27,6 @@ class NotificationSettings(Document):
 		seen: DF.Check
 		subscribed_documents: DF.TableMultiSelect[NotificationSubscribedDocument]
 		user: DF.Link | None
-
 	# end: auto-generated types
 	def on_update(self):
 		from frappe.desk.notifications import clear_notification_config
