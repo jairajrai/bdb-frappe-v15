@@ -17,6 +17,8 @@
   "column_break0",
   "full_name",
   "username",
+  "user_category",
+  "tpin",
   "column_break_11",
   "language",
   "time_zone",
@@ -828,6 +830,21 @@
    "fieldname": "user_branch",
    "fieldtype": "Table",
    "options": "User Branch"
+  },
+  {
+   "fieldname": "user_category",
+   "fieldtype": "Select",
+   "label": "User Category",
+   "options": "Agency Banking\nInternet Banking\nBack Office-BDB",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval:doc.user_category===\"Internet Banking\"",
+   "fieldname": "tpin",
+   "fieldtype": "Data",
+   "label": "Transaction PIN",
+   "length": 6,
+   "non_negative": 1
   }
  ],
  "icon": "fa fa-user",
@@ -891,7 +908,7 @@
   }
  ],
  "make_attachments_public": 1,
- "modified": "2026-01-22 17:04:23.741292",
+ "modified": "2026-02-26 11:34:35.183325",
  "modified_by": "Administrator",
  "module": "Core",
  "name": "User",

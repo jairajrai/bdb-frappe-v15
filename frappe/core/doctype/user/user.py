@@ -131,8 +131,10 @@ class User(Document):
 		thread_notify: DF.Check
 		time_zone: DF.Autocomplete | None
 		timeline: DF.Check
+		tpin: DF.Data | None
 		unsubscribed: DF.Check
 		user_branch: DF.Table[UserBranch]
+		user_category: DF.Literal["Agency Banking", "Internet Banking", "Back Office-BDB"]
 		user_emails: DF.Table[UserEmail]
 		user_image: DF.AttachImage | None
 		user_type: DF.Link | None
