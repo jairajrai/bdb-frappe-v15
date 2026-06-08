@@ -26,6 +26,7 @@ from frappe.utils import cint, date_diff, datetime, get_datetime, today
 from frappe.utils.deprecations import deprecation_warning
 from frappe.utils.password import check_password, get_decrypted_password
 from frappe.website.utils import get_home_page
+from frappe.sessions import clear_sessions
 
 SAFE_HTTP_METHODS = frozenset(("GET", "HEAD", "OPTIONS"))
 UNSAFE_HTTP_METHODS = frozenset(("POST", "PUT", "DELETE", "PATCH"))
@@ -465,11 +466,11 @@ def mobile_login(username, password, device_id):
     import frappe
     from frappe import _
     
-    # Set credentials in form_dict
+    # Set credentials
     frappe.local.form_dict.usr = username
     frappe.local.form_dict.pwd = password
     
-    # Trigger the standard login flow
+    # Standard login
     from frappe.auth import LoginManager
     login_manager = LoginManager()
     login_manager.authenticate()
@@ -477,32 +478,68 @@ def mobile_login(username, password, device_id):
 
     user = frappe.session.user
     
-    # Verify login succeeded
+    # Check login success
     if user == 'Guest':
         frappe.throw(_("Invalid username or password"))
 
-    # Fetch Agent linked to user (using correct field: user_id)
-    agent = frappe.get_value(
-        "Agent",
-        {"user_id": user},
-        ["name", "device_id"],
-        as_dict=True
-    )
+    # Get user category
+    user_category = frappe.get_value("User", user, "user_category")
 
-    if not agent:
-        frappe.throw(_("No Agent profile found for user: {0}").format(user))
+    if user_category not in ["Agency Banking", "FOB"]:
+        frappe.local.login_manager.logout()
+        frappe.throw(_("You are not authorized for Agency Banking"))
+
+    # -------------------------------
+    # FETCH BASED ON USER CATEGORY
+    # -------------------------------
+    if user_category == "Agency Banking":
+        profile = frappe.get_value(
+            "Agent",
+            {"user_id": user},
+            ["name", "device_id"],
+            as_dict=True
+        )
+        doctype = "Agent"
+
+    elif user_category == "FOB":
+        from agency_banking.agency_banking.doctype.fob_approver.fob_approver import allow_fob_login
+        if not allow_fob_login(user):
+            frappe.throw(_("You are not permitted to login"))
+
+        profile = frappe.get_value(
+            "FOB Staff",
+            {"user_id": user},
+            ["name", "device_id"],
+            as_dict=True
+        )
+        doctype = "FOB Staff"
+
+    # -------------------------------
+    # VALIDATION
+    # -------------------------------
+    if not profile:
+        frappe.throw(_("No profile found for user: {0}").format(user))
 
     # FIRST LOGIN → Save device_id
-    if not agent.get("device_id"):
-        frappe.db.set_value("Agent", agent.name, "device_id", device_id)
+    if not profile.get("device_id"):
+        frappe.db.set_value(doctype, profile.name, "device_id", device_id)
         frappe.db.commit()
-        return {"message": "Login successful", "first_login": True}
+        return {
+            "message": "Login successful",
+            "first_login": True,
+            "user_category": user_category
+        }
 
     # NEXT LOGIN → Compare device_id
-    if agent.device_id != device_id:
+    if profile.device_id != device_id:
+        clear_sessions(user=user)
         frappe.throw(_("This account is already registered on another device"))
 
-    return {"message": "Login successful", "first_login": False}
+    return {
+        "message": "Login successful",
+        "first_login": False,
+        "user_category": user_category
+    }
 
 @frappe.whitelist()
 def get_logged_in_user():
@@ -514,6 +551,7 @@ def get_logged_in_user():
     frappe.local.response['first_name'] = user.first_name
     frappe.local.response['api_key'] = user.api_key
     frappe.local.response['api_secret'] = user.get_password("api_secret")
+    frappe.local.response['user_category'] = user.user_category
 
 
 def clear_cookies():
