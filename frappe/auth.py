@@ -485,9 +485,9 @@ def mobile_login(username, password, device_id):
     # Get user category
     user_category = frappe.get_value("User", user, "user_category")
 
-    if user_category not in ["Agency Banking", "FOB"]:
+    if user_category not in ["Agency Banking", "FOB", "Internet Banking"]:
         frappe.local.login_manager.logout()
-        frappe.throw(_("You are not authorized for Agency Banking"))
+        frappe.throw(_("You are not authorized for using the app"))
 
     # -------------------------------
     # FETCH BASED ON USER CATEGORY
@@ -513,6 +513,28 @@ def mobile_login(username, password, device_id):
             as_dict=True
         )
         doctype = "FOB Staff"
+
+    elif user_category == "Internet Banking":
+
+        if "IB App User" not in frappe.get_roles(user):
+            frappe.local.login_manager.logout()
+            frappe.throw(_("You are not authorized to use the app"))
+
+        ib_user = frappe.db.sql("""
+            SELECT
+                name,
+                parent,
+                device_id
+            FROM `tabIB User App`
+            WHERE email = %s
+            LIMIT 1
+        """, user, as_dict=True)
+
+        if not ib_user:
+            frappe.throw(_("No IB Mobile Access profile found for user: {0}").format(user))
+
+        profile = ib_user[0]
+        doctype = "IB User App"
 
     # -------------------------------
     # VALIDATION
